@@ -1,0 +1,137 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyOKuyzqGKihJQTLqOTHcOck",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/EfrainHernandezCortes/Investigaci-n-de-Operaciones-7MM1/blob/main/M%C3%A9todo%20de%20Jacobi\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "id": "_tMN_lGYX_48"
+      },
+      "outputs": [],
+      "source": [
+        "import numpy as np"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Se importa la librería necesaria."
+      ],
+      "metadata": {
+        "id": "9aeXQ8HEZcSb"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def metodo_jacobi(iteracionmax=50, tol=1e-6, verbose=True, x0=None):\n",
+        "# Se define el número máximo de iteraciones, la tolerancia, verbose para indicar las iteraciones y el vector x0.\n",
+        "  if x0 is None:\n",
+        "    x0 = np.ones(4)\n",
+        "  x_k = np.array(x0, dtype=float)\n",
+        "# Se convierte x0 en un numpy.array\n",
+        "  if verbose:\n",
+        "    print(\"Iteración | x1 | x2 | x3 | x4\")\n",
+        "    print(\"-\"*60)\n",
+        "\n",
+        "  for k in range(1, iteracionmax+1):\n",
+        "    x1_kk = x_k[1]/4 + x_k[2]/4\n",
+        "    x2_kk = x_k[0]/4 + x_k[3]/4 + 2/3\n",
+        "    x3_kk = x_k[0]/4 + x_k[3]/4 + 8/9\n",
+        "    x4_kk = x_k[1]/4 + x_k[2]/4 + 14/9\n",
+        "    x_kk = np.array([x1_kk, x2_kk, x3_kk, x4_kk])\n",
+        "# Se hacen las iteraciones iniciando en x0.\n",
+        "    error = np.linalg.norm(x_kk - x_k, ord=np.inf)\n",
+        "    if verbose:\n",
+        "      print(f\"{k:4d} | {error: .3e} | {np.round(x_kk, 6)}\")\n",
+        "    if error < tol:\n",
+        "      print(f\"\\n Convergió en {k} iteraciones.\")\n",
+        "      return x_kk\n",
+        "    x_k = x_kk\n",
+        "  print(\"\\n No converge.\")\n",
+        "  return x_kk\n",
+        "sol = metodo_jacobi(iteracionmax=50, tol=1e-6, verbose=True, x0=[7/27,7/27,7/27,7/27])\n",
+        "# Se inicia en ese vector ya que es el resultado del promedio de los valores en la frontera.\n",
+        "print(\"\\n Solución del sistema:\", np.round(sol, 6))\n",
+        "# Se imprime el resultado."
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "RyJh6bkzZfRB",
+        "outputId": "c09d07db-2bc6-4339-dc9a-34adda203afd"
+      },
+      "execution_count": 11,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Iteración | x1 | x2 | x3 | x4\n",
+            "------------------------------------------------------------\n",
+            "   1 |  1.426e+00 | [0.12963  0.796296 1.018519 1.685185]\n",
+            "   2 |  3.241e-01 | [0.453704 1.12037  1.342593 2.009259]\n",
+            "   3 |  1.620e-01 | [0.615741 1.282407 1.50463  2.171296]\n",
+            "   4 |  8.102e-02 | [0.696759 1.363426 1.585648 2.252315]\n",
+            "   5 |  4.051e-02 | [0.737269 1.403935 1.626157 2.292824]\n",
+            "   6 |  2.025e-02 | [0.757523 1.42419  1.646412 2.313079]\n",
+            "   7 |  1.013e-02 | [0.76765  1.434317 1.656539 2.323206]\n",
+            "   8 |  5.064e-03 | [0.772714 1.439381 1.661603 2.32827 ]\n",
+            "   9 |  2.532e-03 | [0.775246 1.441913 1.664135 2.330802]\n",
+            "  10 |  1.266e-03 | [0.776512 1.443179 1.665401 2.332067]\n",
+            "  11 |  6.330e-04 | [0.777145 1.443811 1.666034 2.3327  ]\n",
+            "  12 |  3.165e-04 | [0.777461 1.444128 1.66635  2.333017]\n",
+            "  13 |  1.582e-04 | [0.77762  1.444286 1.666508 2.333175]\n",
+            "  14 |  7.912e-05 | [0.777699 1.444365 1.666588 2.333254]\n",
+            "  15 |  3.956e-05 | [0.777738 1.444405 1.666627 2.333294]\n",
+            "  16 |  1.978e-05 | [0.777758 1.444425 1.666647 2.333314]\n",
+            "  17 |  9.890e-06 | [0.777768 1.444435 1.666657 2.333323]\n",
+            "  18 |  4.945e-06 | [0.777773 1.444439 1.666662 2.333328]\n",
+            "  19 |  2.472e-06 | [0.777775 1.444442 1.666664 2.333331]\n",
+            "  20 |  1.236e-06 | [0.777777 1.444443 1.666665 2.333332]\n",
+            "  21 |  6.181e-07 | [0.777777 1.444444 1.666666 2.333333]\n",
+            "\n",
+            " Convergió en 21 iteraciones.\n",
+            "\n",
+            " Solución del sistema: [0.777777 1.444444 1.666666 2.333333]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "-194R1R1Z3YW"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ]
+}
