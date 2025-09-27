@@ -1,0 +1,140 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNpRe1QSfWL4Ls7FPAjbK2k",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/EfrainHernandezCortes/Investigaci-n-de-Operaciones-7MM1/blob/main/M%C3%A9todo%20de%20Gauss%20Siedel\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "1JXraGsEL0OD",
+        "outputId": "8b66f9ee-6b7e-4eee-bcd2-3578f8432aee"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Iteración | Error | x1 | x2 | x3 | x4 | x5 | x6 | x7 | x8 | x9\n",
+            "--------------------------------------------------------------------------------\n",
+            "   1 |  9.998e-01 | [0.140625 0.175781 0.614258 0.175781 0.228516 1.281006 0.114258 0.156006\n",
+            " 0.859253]\n",
+            "   2 |  2.645e-01 | [0.087891 0.232666 0.878418 0.107666 0.444336 1.545502 0.065918 0.342377\n",
+            " 0.97197 ]\n",
+            "   3 |  1.528e-01 | [0.085083 0.351959 0.974365 0.148834 0.597168 1.635876 0.122803 0.422985\n",
+            " 1.014715]\n",
+            "   4 |  7.642e-02 | [0.125198 0.424183 1.015015 0.211292 0.673584 1.675828 0.158569 0.461717\n",
+            " 1.034386]\n",
+            "   5 |  3.821e-02 | [0.158869 0.461867 1.034424 0.247756 0.711792 1.695151 0.177368 0.480887\n",
+            " 1.044009]\n",
+            "   6 |  1.910e-02 | [0.177406 0.480905 1.044014 0.266641 0.730896 1.70473  0.186882 0.490447\n",
+            " 1.048794]\n",
+            "   7 |  9.552e-03 | [0.186887 0.490449 1.048795 0.276166 0.740448 1.709509 0.191653 0.495224\n",
+            " 1.051183]\n",
+            "   8 |  4.776e-03 | [0.191654 0.495224 1.051183 0.280939 0.745224 1.711898 0.194041 0.497612\n",
+            " 1.052377]\n",
+            "   9 |  2.388e-03 | [0.194041 0.497612 1.052377 0.283326 0.747612 1.713092 0.195235 0.498806\n",
+            " 1.052974]\n",
+            "  10 |  1.194e-03 | [0.195235 0.498806 1.052974 0.28452  0.748806 1.713689 0.195832 0.499403\n",
+            " 1.053273]\n",
+            "  11 |  5.970e-04 | [0.195832 0.499403 1.053273 0.285117 0.749403 1.713987 0.19613  0.499701\n",
+            " 1.053422]\n",
+            "  12 |  2.985e-04 | [0.19613  0.499701 1.053422 0.285416 0.749701 1.714136 0.196279 0.499851\n",
+            " 1.053497]\n",
+            "  13 |  1.493e-04 | [0.196279 0.499851 1.053497 0.285565 0.749851 1.714211 0.196354 0.499925\n",
+            " 1.053534]\n",
+            "  14 |  7.463e-05 | [0.196354 0.499925 1.053534 0.28564  0.749925 1.714248 0.196391 0.499963\n",
+            " 1.053553]\n",
+            "  15 |  3.731e-05 | [0.196391 0.499963 1.053553 0.285677 0.749963 1.714267 0.19641  0.499981\n",
+            " 1.053562]\n",
+            "  16 |  1.866e-05 | [0.19641  0.499981 1.053562 0.285696 0.749981 1.714276 0.196419 0.499991\n",
+            " 1.053567]\n",
+            "  17 |  9.328e-06 | [0.196419 0.499991 1.053567 0.285705 0.749991 1.714281 0.196424 0.499995\n",
+            " 1.053569]\n",
+            "  18 |  4.664e-06 | [0.196424 0.499995 1.053569 0.28571  0.749995 1.714283 0.196426 0.499998\n",
+            " 1.05357 ]\n",
+            "  19 |  2.332e-06 | [0.196426 0.499998 1.05357  0.285712 0.749998 1.714285 0.196427 0.499999\n",
+            " 1.053571]\n",
+            "  20 |  1.166e-06 | [0.196427 0.499999 1.053571 0.285713 0.749999 1.714285 0.196428 0.499999\n",
+            " 1.053571]\n",
+            "  21 |  5.830e-07 | [0.196428 0.499999 1.053571 0.285714 0.749999 1.714285 0.196428 0.5\n",
+            " 1.053571]\n",
+            "\n",
+            " Convergió en 21 iteraciones.\n",
+            "\n",
+            " Solución del sistema: [0.196428 0.499999 1.053571 0.285714 0.749999 1.714285 0.196428 0.5\n",
+            " 1.053571]\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Se importa la librería necesaria\n",
+        "import numpy as np\n",
+        "# Se define el número máximo de iteraciones, la tolerancia, verbose para indicar las iteraciones y el vector x0.\n",
+        "def metodo_gauss_seidel(iteracionmax=100, tol=1e-6, verbose=True, x0=None):\n",
+        "# Tenemos un sistema de 9x9, así que asignamos la variable n=9\n",
+        "  n=9\n",
+        "  if x0 is None:\n",
+        "    x = np.ones(n)\n",
+        "  x = np.array(x0, dtype=float)\n",
+        "# Escribimos para ver la aproximación en cada iteración\n",
+        "  if verbose:\n",
+        "    print(\"Iteración | Error | x1 | x2 | x3 | x4 | x5 | x6 | x7 | x8 | x9\")\n",
+        "    print(\"-\"*80)\n",
+        "  for k in range(1, iteracionmax+1):\n",
+        "    x_k = x.copy()\n",
+        "# Se toman los valores actualizados\n",
+        "    x[0] = x[1]/4 + x[3]/4\n",
+        "    x[1] = x[0]/4 + x[2]/4 + x[4]/4\n",
+        "    x[2] = x[1]/4 + x[5]/4 + 1/2\n",
+        "    x[3] = x[0]/4 + x[4]/4 + x[6]/4\n",
+        "    x[4] = x[1]/4 + x[3]/4 + x[5]/4 + x[7]/4\n",
+        "    x[5] = x[2]/4 + x[4]/4 + x[8]/4 + 1\n",
+        "    x[6] = x[3]/4 + x[7]/4\n",
+        "    x[7] = x[4]/4 + x[6]/4 + x[8]/4\n",
+        "    x[8] = x[5]/4 + x[7]/4 + 1/2\n",
+        "    error = np.linalg.norm(x - x_k, ord=np.inf)\n",
+        "    if verbose:\n",
+        "      print(f\"{k:4d} | {error: .3e} | {np.round(x, 6)}\")\n",
+        "# Criterio de tolerancia\n",
+        "    if error < tol:\n",
+        "      print(f\"\\n Convergió en {k} iteraciones.\")\n",
+        "      return x\n",
+        "  print(\"\\n No converge.\")\n",
+        "  return x\n",
+        "# Se inicia con el vector siguiente ya que ese valor es el resultado de promediar los valores de la frontera del problema dado\n",
+        "x0 = [9/32,9/32,9/32,9/32,9/32,9/32,9/32,9/32,9/32]\n",
+        "# Se llama al método\n",
+        "sol = metodo_gauss_seidel(iteracionmax=100, tol=1e-6, verbose=True, x0=x0)\n",
+        "# Se imprime el resultado\n",
+        "print(\"\\n Solución del sistema:\", np.round(sol, 6))"
+      ]
+    }
+  ]
+}
